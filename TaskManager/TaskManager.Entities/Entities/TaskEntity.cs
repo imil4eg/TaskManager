@@ -4,9 +4,15 @@ namespace TaskManager.Domain
 {
     public sealed class TaskEntity : TableEntity
     {
-        public int Id { get; set; }
+        public TaskEntity()
+        {
+        }
 
-        public int ProjectId { get; set; }
+        public TaskEntity(int id, int projectId)
+        {
+            RowKey = id.ToString();
+            PartitionKey = projectId.ToString();
+        }
 
         public string Name { get; set; }
 

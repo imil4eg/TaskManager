@@ -1,16 +1,19 @@
 ﻿using Microsoft.Azure.Cosmos.Table;
-using System.Collections.Generic;
 
 namespace TaskManager.Domain
 {
     public sealed class ProjectEntity : TableEntity
     {
-        public int Id { get; set; }
+        public ProjectEntity()
+        {
+        }
 
-        public string Name { get; set; }
+        public ProjectEntity(int id, string name)
+        {
+            RowKey = id.ToString();
+            PartitionKey = name;
+        }
 
         public string Code { get; set; }
-
-        public IReadOnlyCollection<TaskEntity> Tasks { get; set; } 
     }
 }
