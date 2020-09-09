@@ -7,6 +7,6 @@ namespace TaskManager.DAL
     {
         CloudTable GetTable(string tableName);
 
-        CloudTable GetTable(Type tableType);
+        CloudTable GetTable<TEntity>() where TEntity : TableEntity;
     }
 }

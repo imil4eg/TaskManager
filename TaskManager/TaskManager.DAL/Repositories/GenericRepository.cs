@@ -17,7 +17,7 @@ namespace TaskManager.DAL
                 throw new ArgumentNullException(nameof(cloudTableFactory));
             }
 
-            _cloudTable = cloudTableFactory.GetTable(typeof(TEntity));
+            _cloudTable = cloudTableFactory.GetTable<TEntity>();
         }
 
         public async Task<TEntity> CreateAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken))
@@ -36,11 +36,11 @@ namespace TaskManager.DAL
             return insertedProject;
         }
 
-        public async Task<TEntity> GetByIdAsync(int id, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<TEntity> GetAsync(string rowKey, string partitionKey, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            TableOperation retrieveOperation = TableOperation.Retrieve<TEntity>(null, id.ToString());
+            TableOperation retrieveOperation = TableOperation.Retrieve<TEntity>(partitionKey, rowKey);
             TableResult result = await _cloudTable.ExecuteAsync(retrieveOperation);
             TEntity entitiy = result.Result as TEntity;
 
@@ -58,6 +58,21 @@ namespace TaskManager.DAL
 
             TableOperation deleteOperation = TableOperation.Delete(entity);
             TableResult result = await _cloudTable.ExecuteAsync(deleteOperation, cancellationToken);
+        }
+
+        public async Task<TEntity> UpdateOrInsertAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (entity == null) 
+            {
+                throw new ArgumentNullException(nameof(entity));
+            }
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            TableOperation updateOrInsertOperation = TableOperation.InsertOrMerge(entity);
+            TableResult result = await _cloudTable.ExecuteAsync(updateOrInsertOperation, cancellationToken);
+
+            return result.Result as TEntity;
         }
 
         public async Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken))

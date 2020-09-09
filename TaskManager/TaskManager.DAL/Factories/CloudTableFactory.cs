@@ -35,19 +35,16 @@ namespace TaskManager.DAL
             return cloudTable;
         }
 
-        public CloudTable GetTable(Type tableType)
+        public CloudTable GetTable<TEntity>() where TEntity : TableEntity
         {
-            if (tableType is TaskEntity)
+            switch(typeof(TEntity).Name)
             {
-                return GetTable(TableNames.TaskTable);
-            }
-            else if (tableType is ProjectEntity)
-            {
-                return GetTable(TableNames.ProjectTable);
-            }
-            else
-            {
-                throw new NotImplementedException(nameof(tableType));
+                case nameof(ProjectEntity):
+                    return GetTable(TableNames.ProjectTable);
+                case nameof(TaskEntity):
+                    return GetTable(TableNames.TaskTable);
+                default:
+                    throw new NotImplementedException(nameof(TEntity));
             }
         }
     }
