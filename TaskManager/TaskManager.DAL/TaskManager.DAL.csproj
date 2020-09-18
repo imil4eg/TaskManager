@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TaskManager.Domain\TaskManager.Domain.csproj" />
-    <ProjectReference Include="..\TaskManager.Entities\TaskManager.Domain.csproj" />
   </ItemGroup>
 
 </Project>
