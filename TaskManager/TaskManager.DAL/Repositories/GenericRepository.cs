@@ -2,6 +2,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using TaskManager.Domain;
 
 namespace TaskManager.DAL
 {
@@ -18,6 +19,7 @@ namespace TaskManager.DAL
             }
 
             _cloudTable = cloudTableFactory.GetTable<TEntity>();
+            _cloudTable.CreateIfNotExists();
         }
 
         public async Task<TEntity> CreateAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken))
@@ -34,17 +36,6 @@ namespace TaskManager.DAL
             TEntity insertedProject = result.Result as TEntity;
 
             return insertedProject;
-        }
-
-        public async Task<TEntity> GetAsync(string rowKey, string partitionKey, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-
-            TableOperation retrieveOperation = TableOperation.Retrieve<TEntity>(partitionKey, rowKey);
-            TableResult result = await _cloudTable.ExecuteAsync(retrieveOperation);
-            TEntity entitiy = result.Result as TEntity;
-
-            return entitiy;
         }
 
         public async Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken))
