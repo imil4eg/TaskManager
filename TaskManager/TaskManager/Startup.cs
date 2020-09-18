@@ -1,15 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using TaskManager.Application.Queries;
+using TaskManager.DAL;
+using TaskManager.Domain;
+using TaskManager.Interfaces;
+using TaskManager.Services;
 
 namespace TaskManager
 {
@@ -26,6 +26,22 @@ namespace TaskManager
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddMediatR(typeof(Startup));
+
+            services.AddSingleton<ICloudTableFactory, CloudTableFactory>(options => new CloudTableFactory(Configuration.GetConnectionString("AzureDatabase")));
+            services.AddSingleton<IGenericRepository<ProjectEntity>, GenericRepository<ProjectEntity>>();
+            services.AddSingleton<IGenericRepository<TaskEntity>, GenericRepository<TaskEntity>>();
+            services.AddSingleton<ITableQueries<ProjectEntity, ProjectViewModel>, TableQueries<ProjectEntity, ProjectViewModel>>();
+            services.AddSingleton<ITableQueries<TaskEntity, TaskViewModel>, TableQueries<TaskEntity, TaskViewModel>>();
+            services.AddSingleton<IProjectService, ProjectService>();
+
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
