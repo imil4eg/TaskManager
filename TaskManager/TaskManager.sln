@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29326.143
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskManager", "TaskManager\TaskManager.csproj", "{60D9758B-F40C-4798-989E-81F0490A6957}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskManager.Domain", "TaskManager.Entities\TaskManager.Domain.csproj", "{28AEB52E-CB73-45BC-BDC1-107649007E2D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskManager.Domain", "TaskManager.Domain\TaskManager.Domain.csproj", "{28AEB52E-CB73-45BC-BDC1-107649007E2D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskManager.DAL", "TaskManager.DAL\TaskManager.DAL.csproj", "{A6DD5A02-60FE-4220-9183-B6D3EB604316}"
 EndProject
