@@ -1,4 +1,5 @@
 ﻿using Microsoft.Azure.Cosmos.Table;
+using System;
 
 namespace TaskManager.Domain
 {
@@ -8,7 +9,7 @@ namespace TaskManager.Domain
         {
         }
 
-        public ProjectEntity(int id, string name)
+        public ProjectEntity(Guid id, string name)
         {
             RowKey = id.ToString();
             PartitionKey = name;
